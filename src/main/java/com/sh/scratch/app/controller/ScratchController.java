@@ -143,10 +143,17 @@ public class ScratchController {
 	
 	private void backupFile() throws Exception {
 		Path p = Paths.get(statsFile);
-		FileOutputStream oStr = new FileOutputStream("backup-".concat(String.valueOf(System.currentTimeMillis())).concat("-").concat(statsFile));
+		Path parent = p.toAbsolutePath().getParent();
+		String filename  = "backup-".concat(String.valueOf(System.currentTimeMillis())).concat("-").concat(p.getFileName().toString());
+		Path res = parent.resolve(filename);
+		
+		
+		FileOutputStream oStr = new FileOutputStream(res.toString());
 		Files.copy(p, oStr);
 		oStr.close();
 		Files.delete(p);
+		
+		LOGGER.info(res.toString());
 	}
 	
 }
